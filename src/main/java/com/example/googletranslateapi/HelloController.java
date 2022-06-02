@@ -31,11 +31,11 @@ public class HelloController
     @FXML
     private ComboBox languageSelectMenu;
 
-    private String target;
+    private String target;//Language to translate to
 
-    HashMap<String, String> languageCodes = new HashMap<String,String>();
+    HashMap<String, String> languageCodes = new HashMap<String,String>();//HashMap to contain codes for supported languages
 
-    ObservableList<String> menuOptions = FXCollections.observableArrayList(
+    ObservableList<String> menuOptions = FXCollections.observableArrayList(//Drop down menu options
             "Albanian",
             "Arabic",
             "Dutch",
@@ -51,7 +51,7 @@ public class HelloController
     );
 
     @FXML
-    protected void onLanguageSelectClick()
+    protected void onLanguageSelectClick()//Need to fix this so that it is set when program begins, not when the drop down is clicked
     {
         languageCodes.put("Albanian", "sq");
         languageCodes.put("Arabic", "ar");
@@ -72,9 +72,9 @@ public class HelloController
     @FXML
     protected void onTranslateButtonClick() throws Exception
     {
-        String language = (String) languageSelectMenu.getValue();
-        target = languageCodes.get(language);
-        outputField.setText(translate(inputField.getText()));
+        String language = (String) languageSelectMenu.getValue();//Get language to translate to
+        target = languageCodes.get(language);//Get code to use in GT API connection
+        outputField.setText(translate(inputField.getText()));//Set text of the output to the translation
     }
 
     protected String translate(String original)throws Exception
@@ -86,14 +86,14 @@ public class HelloController
                 .header("X-RapidAPI-Host", "google-translate1.p.rapidapi.com")
                 .header("X-RapidAPI-Key", "4125e08ab5msh1e35e54946ee894p1de70djsn0b70aa45221f")
                 .method("POST", HttpRequest.BodyPublishers.ofString("q=" +
-                        original +
+                        original +//Input text,
                         "&format=text" +
-                        "&target=" + target +
-                        "&source=en"))
+                        "&target=" + target +//Language to translate to
+                        "&source=en"))//Language of input text. Only supporting English at the moment.
                 .build();
         HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
         String ret = response.body();
-        ret = ret.substring(ret.indexOf("translatedText")+17, ret.length()-5);
+        ret = ret.substring(ret.indexOf("translatedText")+17, ret.length()-5);//Cut off unnecessary characters in the response. Just want the translation
         return ret;
     }
 }
