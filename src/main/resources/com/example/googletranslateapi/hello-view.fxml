@@ -14,8 +14,8 @@
 
     <Label fx:id="inputLabel" text="Input Text:"/>
     <TextField fx:id="inputField"/>
+    <Button text="Translate" onAction="#onTranslateButtonClick"/>
     <Label fx:id="outputLabel" text="Output Text:"/>
     <TextField fx:id="outputField"/>
 
-    <Button text="Translate" onAction="#onTranslateButtonClick"/>
 </VBox>
