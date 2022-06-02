@@ -1,5 +1,8 @@
 package com.example.googletranslateapi;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
@@ -9,7 +12,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 
-import java.net.URI;
+import java.util.HashMap;
 
 public class HelloController
 {
@@ -25,12 +28,52 @@ public class HelloController
     @FXML
     private TextField outputField;
 
-//    private String inputText;
-//    private String outputText;
+    @FXML
+    private ComboBox languageSelectMenu;
+
+    private String target;
+
+    HashMap<String, String> languageCodes = new HashMap<String,String>();
+
+    ObservableList<String> menuOptions = FXCollections.observableArrayList(
+            "Albanian",
+            "Arabic",
+            "Dutch",
+            "French",
+            "German",
+            "Greek",
+            "Hindi",
+            "Italian",
+            "Japanese",
+            "Korean",
+            "Russian",
+            "Spanish"
+    );
+
+    @FXML
+    protected void onLanguageSelectClick()
+    {
+        languageCodes.put("Albanian", "sq");
+        languageCodes.put("Arabic", "ar");
+        languageCodes.put("Dutch", "nl");
+        languageCodes.put("French", "fr");
+        languageCodes.put("German", "de");
+        languageCodes.put("Greek", "el");
+        languageCodes.put("Hindi", "hi");
+        languageCodes.put("Italian", "it");
+        languageCodes.put("Japanese", "ja");
+        languageCodes.put("Korean", "ko");
+        languageCodes.put("Russian", "ru");
+        languageCodes.put("Spanish", "es");
+        languageSelectMenu.setItems(menuOptions);
+    }
+
 
     @FXML
     protected void onTranslateButtonClick() throws Exception
     {
+        String language = (String) languageSelectMenu.getValue();
+        target = languageCodes.get(language);
         outputField.setText(translate(inputField.getText()));
     }
 
@@ -45,7 +88,7 @@ public class HelloController
                 .method("POST", HttpRequest.BodyPublishers.ofString("q=" +
                         original +
                         "&format=text" +
-                        "&target=es" +
+                        "&target=" + target +
                         "&source=en"))
                 .build();
         HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());

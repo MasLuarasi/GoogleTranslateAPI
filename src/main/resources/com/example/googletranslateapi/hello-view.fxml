@@ -6,6 +6,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ComboBox?>
 <VBox alignment="CENTER_LEFT" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.googletranslateapi.HelloController">
     <padding>
@@ -16,6 +17,7 @@
     <TextField fx:id="inputField"/>
     <Button text="Translate" onAction="#onTranslateButtonClick"/>
     <Label fx:id="outputLabel" text="Output Text:"/>
-    <TextField fx:id="outputField"/>
+    <ComboBox fx:id="languageSelectMenu" onMouseClicked="#onLanguageSelectClick"/>
+    <TextField fx:id="outputField" editable="false"/>
 
 </VBox>
