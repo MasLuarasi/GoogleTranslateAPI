@@ -3,7 +3,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import java.net.URI;
@@ -17,12 +16,6 @@ import java.util.HashMap;
 public class HelloController
 {
     @FXML
-    private Label inputLabel;
-
-    @FXML
-    private Label outputLabel;
-
-    @FXML
     private TextField inputField;
 
     @FXML
@@ -33,7 +26,7 @@ public class HelloController
 
     private String target;//Language to translate to
 
-    HashMap<String, String> languageCodes = new HashMap<String,String>();//HashMap to contain codes for supported languages
+    HashMap<String, String> languageCodes = new HashMap<>();//HashMap to contain codes for supported languages
 
     ObservableList<String> menuOptions = FXCollections.observableArrayList(//Drop down menu options
             "Albanian",
@@ -51,7 +44,7 @@ public class HelloController
     );
 
     @FXML
-    protected void onLanguageSelectClick()//Need to fix this so that it is set when program begins, not when the drop down is clicked
+    protected void onLanguageSelectClick()//Need to fix this so that it is set when program begins, not when the drop-down is clicked
     {
         languageCodes.put("Albanian", "sq");
         languageCodes.put("Arabic", "ar");

@@ -13,10 +13,10 @@
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
 
-    <Label fx:id="inputLabel" text="Input Text:"/>
+    <Label text="Input Text:"/>
     <TextField fx:id="inputField"/>
     <Button text="Translate" onAction="#onTranslateButtonClick"/>
-    <Label fx:id="outputLabel" text="Output Text:"/>
+    <Label text="Output Text:"/>
     <ComboBox fx:id="languageSelectMenu" onMouseClicked="#onLanguageSelectClick"/>
     <TextField fx:id="outputField" editable="false"/>
 
