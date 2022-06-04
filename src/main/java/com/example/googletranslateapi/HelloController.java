@@ -3,7 +3,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -16,36 +17,24 @@ import java.util.HashMap;
 public class HelloController
 {
     @FXML
-    private TextField inputField;
+    private Label warning;
+    @FXML
+    private TextArea inputField;
 
     @FXML
-    private TextField outputField;
+    private TextArea outputField;
 
     @FXML
     private ComboBox languageSelectMenu;
 
     private String target;//Language to translate to
 
-    HashMap<String, String> languageCodes = new HashMap<>();//HashMap to contain codes for supported languages
+    HashMap<String, String> languageCodes;
 
-    ObservableList<String> menuOptions = FXCollections.observableArrayList(//Drop down menu options
-            "Albanian",
-            "Arabic",
-            "Dutch",
-            "French",
-            "German",
-            "Greek",
-            "Hindi",
-            "Italian",
-            "Japanese",
-            "Korean",
-            "Russian",
-            "Spanish"
-    );
-
-    @FXML
-    protected void onLanguageSelectClick()//Need to fix this so that it is set when program begins, not when the drop-down is clicked
+    public HelloController()
     {
+        target = "";
+        languageCodes = new HashMap<>();
         languageCodes.put("Albanian", "sq");
         languageCodes.put("Arabic", "ar");
         languageCodes.put("Dutch", "nl");
@@ -58,18 +47,32 @@ public class HelloController
         languageCodes.put("Korean", "ko");
         languageCodes.put("Russian", "ru");
         languageCodes.put("Spanish", "es");
-        languageSelectMenu.setItems(menuOptions);
     }
-
 
     @FXML
-    protected void onTranslateButtonClick() throws Exception
-    {
-        String language = (String) languageSelectMenu.getValue();//Get language to translate to
-        target = languageCodes.get(language);//Get code to use in GT API connection
-        outputField.setText(translate(inputField.getText()));//Set text of the output to the translation
+    protected void onTranslateButtonClick() throws Exception {
+        String inputText = inputField.getText();
+        if (inputText.equals(""))
+        {
+            warning.setText("CANNOT TRANSLATE EMPTY TEXT");
+            warning.setVisible(true);
+        }
+        else
+        {
+            String language = (String) languageSelectMenu.getValue();//Get language to translate to
+            if (language == null)
+            {
+                warning.setText("NO LANGUAGE SELECTED");
+            }
+            else
+            {
+                warning.setVisible(false);
+                target = languageCodes.get(language);//Get code to use in GT API connection
+                System.out.println(target);
+                outputField.setText(translate(inputText));//Set text of the output to the translation
+            }
+        }
     }
-
     protected String translate(String original)throws Exception
     {
         HttpRequest request = HttpRequest.newBuilder()
@@ -85,8 +88,8 @@ public class HelloController
                         "&source=en"))//Language of input text. Only supporting English at the moment.
                 .build();
         HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-        String ret = response.body();
-        ret = ret.substring(ret.indexOf("translatedText")+17, ret.length()-5);//Cut off unnecessary characters in the response. Just want the translation
-        return ret;
+        String outputText = response.body();
+        outputText = outputText.substring(outputText.indexOf("translatedText")+17, outputText.length()-5);//Cut off unnecessary characters in the response. Just want the translation
+        return outputText;
     }
 }
